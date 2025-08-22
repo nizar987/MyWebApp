@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - My Portfolio{% endblock %}
+
+{% block content %}
+<!-- Project Detail Section -->
+<section class="py-5" style="margin-top: 76px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Project Image -->
+                {% if project.image %}
+                <div class="mb-4">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" class="img-fluid rounded shadow">
+                </div>
+                {% endif %}
+                
+                <!-- Project Header -->
+                <div class="mb-4">
+                    <h1 class="h1 fw-bold mb-3">{{ project.title }}</h1>
+                    <div class="d-flex gap-3 mb-3">
+                        {% if project.github_url %}
+                        <a href="{{ project.github_url }}" class="btn btn-outline-dark" target="_blank">
+                            <i class="fab fa-github me-2"></i>View Code
+                        </a>
+                        {% endif %}
+                        {% if project.live_url %}
+                        <a href="{{ project.live_url }}" class="btn btn-primary" target="_blank">
+                            <i class="fas fa-external-link-alt me-2"></i>Live Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                    <p class="text-muted">
+                        <i class="fas fa-calendar me-2"></i>Created: {{ project.created_at|date:"F Y" }}
+                    </p>
+                </div>
+                
+                <!-- Project Description -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="h4 mb-3">Project Description</h3>
+                        <p class="lead">{{ project.description }}</p>
+                    </div>
+                </div>
+                
+                <!-- Technologies Used -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="h4 mb-3">Technologies Used</h3>
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for tech in project.technologies.split|slice:":10" %}
+                            <span class="badge bg-primary fs-6">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Back to Projects -->
+                <div class="text-center">
+                    <a href="{% url 'projects' %}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact CTA Section -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="h1 fw-bold mb-4">Interested in This Project?</h2>
+        <p class="lead mb-4">Let's discuss how we can work together on similar projects.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-paper-plane me-2"></i>Get In Touch
+        </a>
+    </div>
+</section>
+{% endblock %}

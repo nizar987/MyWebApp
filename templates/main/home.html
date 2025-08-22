@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - My Portfolio{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section d-flex align-items-center min-vh-100" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-white mb-4">
+                    Hi, I'm <span class="text-warning">Muhammad Nizar Aulia</span>
+                </h1>
+                <h2 class="h3 text-light mb-4">Full Stack Developer</h2>
+                <p class="lead text-light mb-4">
+                    I create beautiful, functional, and user-friendly web applications. 
+                    Passionate about clean code and innovative solutions.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="{% url 'projects' %}" class="btn btn-warning btn-lg">
+                        <i class="fas fa-eye me-2"></i>View My Work
+                    </a>
+                    <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-envelope me-2"></i>Get In Touch
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <div class="hero-image">
+                    <i class="fas fa-code text-white" style="font-size: 15rem; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- About Preview Section -->
+{% if about %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                {% if about.image %}
+                    <img src="{{ about.image.url }}" alt="About Me" class="img-fluid rounded shadow">
+                {% else %}
+                    <div class="bg-secondary rounded shadow d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-user text-white" style="font-size: 8rem; opacity: 0.5;"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <h2 class="h1 fw-bold mb-4">{{ about.title }}</h2>
+                <p class="lead mb-4">{{ about.content|truncatewords:50 }}</p>
+                <a href="{% url 'about' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user me-2"></i>Learn More About Me
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Skills Section -->
+{% if skills %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="h1 fw-bold">My Skills</h2>
+            <p class="lead text-muted">Technologies and tools I work with</p>
+        </div>
+        
+        <div class="row">
+            {% for skill in skills %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="skill-icon mb-3">
+                            <i class="fas fa-code fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">{{ skill.name }}</h5>
+                        <p class="card-text text-muted">{{ skill.get_category_display }}</p>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" 
+                                 style="width: {{ skill.proficiency }}%" 
+                                 aria-valuenow="{{ skill.proficiency }}" 
+                                 aria-valuemin="0" aria-valuemax="100">
+                                {{ skill.proficiency }}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Projects Section -->
+{% if projects %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="h1 fw-bold">Featured Projects</h2>
+            <p class="lead text-muted">Some of my recent work</p>
+        </div>
+        
+        <div class="row">
+            {% for project in projects %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 border-0 shadow-sm project-card">
+                    {% if project.image %}
+                        <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                    {% else %}
+                        <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="fas fa-project-diagram text-white fa-3x"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ project.title }}</h5>
+                        <p class="card-text">{{ project.description|truncatewords:20 }}</p>
+                        <p class="text-muted small">
+                            <i class="fas fa-tags me-1"></i>{{ project.technologies }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0">
+                        <div class="d-flex gap-2">
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" class="btn btn-outline-dark btn-sm" target="_blank">
+                                <i class="fab fa-github me-1"></i>Code
+                            </a>
+                            {% endif %}
+                            {% if project.live_url %}
+                            <a href="{{ project.live_url }}" class="btn btn-primary btn-sm" target="_blank">
+                                <i class="fas fa-external-link-alt me-1"></i>Live Demo
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'project_detail' project.pk %}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-info-circle me-1"></i>Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'projects' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-folder-open me-2"></i>View All Projects
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Experience Section -->
+{% if experiences %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="h1 fw-bold">Experience</h2>
+            <p class="lead text-muted">My professional journey</p>
+        </div>
+        
+        <div class="row">
+            {% for experience in experiences %}
+            <div class="col-lg-6 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div>
+                                <h5 class="card-title mb-1">{{ experience.position }}</h5>
+                                <h6 class="text-primary">{{ experience.company }}</h6>
+                            </div>
+                            <span class="badge bg-success">
+                                {% if experience.current %}
+                                    Current
+                                {% else %}
+                                    {{ experience.start_date|date:"M Y" }} - {{ experience.end_date|date:"M Y" }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <p class="card-text">{{ experience.description|truncatewords:30 }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{% url 'about' %}" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-history me-2"></i>View Full Experience
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Contact CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="h1 fw-bold mb-4">Let's Work Together</h2>
+        <p class="lead mb-4">I'm always interested in new opportunities and exciting projects.</p>
+        <a href="{% url 'contact' %}" class="btn btn-warning btn-lg">
+            <i class="fas fa-paper-plane me-2"></i>Get In Touch
+        </a>
+    </div>
+</section>
+{% endblock %}
